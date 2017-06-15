@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Kõnele launcher</string>
+    <string name="app_desc">An app that launches Kõnele on Android Things</string>
+    <string name="msg_press_button">Press the button connected to BCM4 on your GPIO board to launch Kõnele.
+        \nLaunching the recognizer immediately from adb:\n
+    \"adb shell am start -n ee.ioc.phon.android.things.k6nelelauncher/.ActivityLauncherActivity --ez auto_start true\"
+    \nUsing another button:\n
+        \"adb shell am start -n ee.ioc.phon.android.things.k6nelelauncher/.ActivityLauncherActivity -e gpio_button BCM4\"
+        \nor (if you have a mouse and a monitor) then press this button.
+    </string>
+    <string name="btn_launch">Launch</string>
+    <string name="activity_name_activity_launcher">Kõnele activity launcher</string>
+</resources>
