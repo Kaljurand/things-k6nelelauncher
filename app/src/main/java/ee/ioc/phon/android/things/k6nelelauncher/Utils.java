@@ -20,8 +20,7 @@ public final class Utils {
         intent.setComponent(ComponentName.unflattenFromString(ACTIVITY));
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        // TODO: VOICE_PROMPT has issues on Android Things
-        //intent.putExtra(Extras.EXTRA_VOICE_PROMPT, prompt1);
+        intent.putExtra(Extras.EXTRA_VOICE_PROMPT, prompt1);
         intent.putExtra(Extras.EXTRA_SERVICE_COMPONENT, service1);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt1);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale1);
@@ -33,12 +32,11 @@ public final class Utils {
         intent.putExtra(Extras.EXTRA_RESULT_UTTERANCE, ".+");
         intent.putExtra(Extras.EXTRA_RESULT_COMMAND, "activity");
         // TODO: create this from JSON
-        // TODO: VOICE_PROMPT has issues on Android Things
-        // "\"ee.ioc.phon.android.extra.VOICE_PROMPT\":\"" + prompt2 + "\"," +
         intent.putExtra(Extras.EXTRA_RESULT_ARG1,
                 "{\"component\": \"" + ACTIVITY + "\"," +
                         "\"extras\":{" +
                         "\"ee.ioc.phon.android.extra.SERVICE_COMPONENT\":\"" + service2 + "\"," +
+                        "\"ee.ioc.phon.android.extra.VOICE_PROMPT\":\"" + prompt2 + "\"," +
                         "\"android.speech.extra.PROMPT\":\"" + prompt2 + "\"," +
                         "\"android.speech.extra.MAX_RESULTS\":1," +
                         "\"android.speech.extra.LANGUAGE\":\"" + locale2 + "\"," +
@@ -58,7 +56,7 @@ public final class Utils {
         intent.setComponent(ComponentName.unflattenFromString(ACTIVITY));
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        //intent.putExtra(Extras.EXTRA_VOICE_PROMPT, prompt);
+        intent.putExtra(Extras.EXTRA_VOICE_PROMPT, prompt);
         intent.putExtra(Extras.EXTRA_SERVICE_COMPONENT, service);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale);
