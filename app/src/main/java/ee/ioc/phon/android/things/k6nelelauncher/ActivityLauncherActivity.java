@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.GpioCallback;
-import com.google.android.things.pio.PeripheralManagerService;
+import com.google.android.things.pio.PeripheralManager;
 
 import java.io.IOException;
 
@@ -76,11 +76,12 @@ public class ActivityLauncherActivity extends Activity {
         super.onResume();
         mK6neleIsRunning = false;
         Bundle extras = getExtras();
-        PeripheralManagerService service = new PeripheralManagerService();
+
+        PeripheralManager manager = PeripheralManager.getInstance();
         try {
             // Create GPIO connection.
             // Use PeripheralManagerService to open a connection with the GPIO port wired to the button.
-            mButtonGpio = service.openGpio(extras.getString("gpio_button", DEFAULT_GPIO_BUTTON));
+            mButtonGpio = manager.openGpio(extras.getString("gpio_button", DEFAULT_GPIO_BUTTON));
 
             // Configure as an input.
             // Configure the port with DIRECTION_IN.
@@ -94,6 +95,10 @@ public class ActivityLauncherActivity extends Activity {
             // Register a GpioCallback to receive edge trigger events.
             mButtonGpio.registerGpioCallback(mCallback);
         } catch (IOException e) {
+            Log.e("Error while setting up PeripheralIO API", e);
+        } catch (SecurityException e) {
+            // We need to have com.google.android.things.permission.USE_PERIPHERAL_IO for GPIO,
+            // but this is not essential.
             Log.e("Error while setting up PeripheralIO API", e);
         }
 

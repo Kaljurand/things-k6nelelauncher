@@ -2,25 +2,41 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
     defaultConfig {
         applicationId "ee.ioc.phon.android.things.k6nelelauncher"
-        minSdkVersion 15
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 24
+        targetSdkVersion 28
+        versionCode 2
+        versionName '0.0.2'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
     lintOptions {
         disable 'GoogleAppIndexingWarning', 'AllowBackup', 'TypographyDashes', 'MissingApplicationIcon'
     }
+}
+
+if (project.hasProperty('storePassword') &&
+        project.hasProperty('keyPassword')) {
+    android.signingConfigs.release.storeFile = file(System.getenv("KEYSTORE"))
+    android.signingConfigs.release.keyAlias = System.getenv("KEY_ALIAS")
+    android.signingConfigs.release.storePassword = storePassword
+    android.signingConfigs.release.keyPassword = keyPassword
+} else {
+    android.buildTypes.release.signingConfig = null
 }
 
 dependencies {
@@ -30,5 +46,34 @@ dependencies {
     //})
     //testCompile 'junit:junit:4.12'
 
-    compileOnly 'com.google.android.things:androidthings:0.4-devpreview'
+    compileOnly 'com.google.android.things:androidthings:+'
+}
+
+task(deploy) << {
+    description 'Copy the APK and the ProGuard mapping file to the deploy directory'
+
+    def deploy_dir = System.getenv('APK_DEPLOY_DIR')
+
+    def version = android.defaultConfig.versionName
+
+    def outputs = 'build/outputs/'
+    def apk1 = outputs + 'apk/release/app-release.apk'
+    def apk2 = "${deploy_dir}things-k6nelelauncher-${version}.apk"
+    //def mapping1 = outputs + 'mapping/release/mapping.txt'
+    //def mapping2 = "${deploy_dir}things-k6nelelauncher-mapping-${version}.txt"
+
+    exec {
+        commandLine 'cp', '--verbose', apk1, apk2
+    }
+
+    //exec {
+    //    commandLine 'cp', '--verbose', mapping1, mapping2
+    //}
+
+    exec {
+        commandLine 'ls', '-l', deploy_dir
+    }
+
+    println "adb uninstall ${android.defaultConfig.applicationId}"
+    println "adb install ${apk2}"
 }
